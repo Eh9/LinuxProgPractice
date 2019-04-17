@@ -4,7 +4,7 @@
 #include<fcntl.h>
 #include<unistd.h>
 
-#define SHOWHOST 		//??
+#define SHOWHOST 		
 
 void show_info(struct utmp* utp)
 {
