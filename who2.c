@@ -5,6 +5,7 @@
 #include<unistd.h>
 #include<time.h>
 
+#define UTMPBUFSIZE	16
 #define SHOWHOST 		
 
 void show_info(struct utmp* utp)
@@ -26,19 +27,35 @@ void show_info(struct utmp* utp)
 	printf("\n");
 }
 
+int readInBuf(int utmpfd, struct utmp *buf, int buflen)
+{
+	int ret, i;
+	int utmplen = sizeof(struct utmp);
+	for(i = 0 ;i < buflen; ++ i)
+	{
+		ret = read(utmpfd, buf + i, utmplen);
+		if( ret != utmplen )
+			break;
+	}
+	return i + 1;
+}
+
 int main(int argc, char** argv)
 {
-	struct utmp	current_record;
-	int 		utmpfd;
-	int		reclen = sizeof(current_record);
-	if((utmpfd = open(UTMP_FILE, O_RDONLY)) == -1)
+	struct utmp	buf[UTMPBUFSIZE];
+	int bufsize = UTMPBUFSIZE;
+	int utmpfd;
+	if( (utmpfd = open(UTMP_FILE, O_RDONLY)) == -1)
 	{
 		perror(UTMP_FILE);
 		exit(1);
 	}
-	while(reclen == read(utmpfd, &current_record, reclen))
-		show_info(&current_record);
-	close(utmpfd);
+	while( bufsize == UTMPBUFSIZE )
+	{
+		bufsize = readInBuf(utmpfd, buf, bufsize);
+		for(int i = 0; i < bufsize; ++ i)
+			show_info(buf+i);
+	}
 	return 0;
 
 }
