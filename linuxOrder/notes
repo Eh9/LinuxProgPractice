@@ -1,0 +1,2 @@
+内核通过全局变量errno来指明错误的类型，每个程序都可以访问到这个变量。
+perror(string)会自己查找错误代码，并且将其送至标准错误输出。eg: string:Permission Deny!
