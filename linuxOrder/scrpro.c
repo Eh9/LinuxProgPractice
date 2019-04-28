@@ -7,10 +7,10 @@ int main(){
 	int 	a = 7;					//x step
 	int	b = 7;					//y step	
 	int	x = 0;					//x start
-	int	yleft = 0;					//y start
+	int	yleft = 0;				//y start
 	char 	strShow[] = "i am your father";		//show welcome
 	char 	blkShow[] = "                ";		//blank
-	int 	yright = yleft + strlen(strShow);
+	int 	yright = yleft + strlen(strShow);	//y end
 
 
 	initscr();
